@@ -1,0 +1,63 @@
+<!-- views/question.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question <%= questionNumber %></title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <style>
+        #editor {
+            width: 100%; /* Responsive width */
+            height: 500px; /* Increased height */
+            border: 1px solid #ccc; /* Add a border for visual separation */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4 flex flex-col md:flex-row min-h-screen">
+
+        <!-- Question Section -->
+        <div class="md:w-1/2 p-4">
+            <h1 class="text-3xl font-semibold mb-4 text-gray-800">Question <%= questionNumber %></h1>
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-xl font-bold mb-2 text-gray-700"><%= question.title %></h2>
+                <p class="text-gray-600 mb-4"><%= question.description %></p>
+            </div>
+        </div>
+
+        <!-- Editor Section -->
+        <div class="md:w-1/2 p-4">
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-xl font-bold mb-2 text-gray-700">Code Editor</h2>
+                <div class="mb-4">
+                    <div id="editor" class="rounded"><%= question.skeletonCode %></div>
+                </div>
+
+                <form action="/submit-answer/<%= questionNumber %>" method="POST" class="flex justify-end">
+                    <input type="hidden" id="code" name="code">
+                    <button type="button" onclick="submitCode()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Submit Answer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-200 text-center p-4 mt-4">
+        <p class="text-sm text-gray-500">© 2024 Coding Test</p>
+    </footer>
+
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/python");
+
+        function submitCode() {
+            document.getElementById("code").value = editor.getValue();
+            document.querySelector("form").submit();
+        }
+    </script>
+</body>
+</html>
